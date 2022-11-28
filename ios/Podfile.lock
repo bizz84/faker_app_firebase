@@ -1,10 +1,4 @@
 PODS:
-  - AppAuth (1.6.0):
-    - AppAuth/Core (= 1.6.0)
-    - AppAuth/ExternalUserAgent (= 1.6.0)
-  - AppAuth/Core (1.6.0)
-  - AppAuth/ExternalUserAgent (1.6.0):
-    - AppAuth/Core
   - desktop_webview_auth (0.0.1):
     - Flutter
   - Firebase/Auth (10.2.0):
@@ -40,13 +34,6 @@ PODS:
   - FirebaseDynamicLinks (10.2.0):
     - FirebaseCore (~> 10.0)
   - Flutter (1.0.0)
-  - google_sign_in_ios (0.0.1):
-    - Flutter
-    - GoogleSignIn (~> 6.2)
-  - GoogleSignIn (6.2.4):
-    - AppAuth (~> 1.5)
-    - GTMAppAuth (~> 1.3)
-    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
   - GoogleUtilities/AppDelegateSwizzler (7.10.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -62,9 +49,6 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.10.0)"
   - GoogleUtilities/Reachability (7.10.0):
     - GoogleUtilities/Logger
-  - GTMAppAuth (1.3.1):
-    - AppAuth/Core (~> 1.6)
-    - GTMSessionFetcher/Core (< 3.0, >= 1.5)
   - GTMSessionFetcher/Core (2.3.0)
   - PromisesObjC (2.1.1)
 
@@ -74,19 +58,15 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
   - Flutter (from `Flutter`)
-  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
 
 SPEC REPOS:
   trunk:
-    - AppAuth
     - Firebase
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreInternal
     - FirebaseDynamicLinks
-    - GoogleSignIn
     - GoogleUtilities
-    - GTMAppAuth
     - GTMSessionFetcher
     - PromisesObjC
 
@@ -101,11 +81,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_dynamic_links/ios"
   Flutter:
     :path: Flutter
-  google_sign_in_ios:
-    :path: ".symlinks/plugins/google_sign_in_ios/ios"
 
 SPEC CHECKSUMS:
-  AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   desktop_webview_auth: d645139460ef203d50bd0cdb33356785dd939cce
   Firebase: a3ea7eba4382afd83808376edb99acdaff078dcf
   firebase_auth: 2e7181850b75b99cdf7eccffa35def8f7704b905
@@ -116,10 +93,7 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 091bde13e47bb1c5e9fe397634f3593dc390430f
   FirebaseDynamicLinks: f832045bdb98db10ecaca9ab7e258f1602395d7c
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  google_sign_in_ios: 4f85eb9f937450765c8573bb85fd8cd6a5af675c
-  GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
-  GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
 
