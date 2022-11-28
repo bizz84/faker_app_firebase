@@ -9,19 +9,17 @@ class CustomProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authProviders = ref.watch(authProvidersProvider);
-    return Scaffold(
+    return ProfileScreen(
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: ProfileScreen(
-        providers: authProviders,
-        actions: [
-          SignedOutAction((context) {
-            print('signed out');
-            //context.goNamed(AppRoute.signIn.name);
-          }),
-        ],
-      ),
+      providers: authProviders,
+      actions: [
+        SignedOutAction((context) {
+          print('signed out');
+          //context.goNamed(AppRoute.signIn.name);
+        }),
+      ],
     );
   }
 }
