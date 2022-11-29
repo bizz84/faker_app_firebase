@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authProvidersProvider = Provider<List<AuthProvider>>((ref) {
   return [
-    GoogleProvider(clientId: kGoogleClientId),
     EmailAuthProvider(),
+    GoogleProvider(clientId: getGoogleClientId()),
   ];
 });
 

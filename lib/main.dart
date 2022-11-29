@@ -1,7 +1,6 @@
 import 'package:faker_app_firebase/firebase_options.dart';
 import 'package:faker_app_firebase/google_client_id.dart';
 import 'package:faker_app_firebase/src/routing/app_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,8 @@ Future<void> main() async {
   );
 
   FirebaseUIAuth.configureProviders([
-    GoogleProvider(clientId: kGoogleClientId),
+    GoogleProvider(clientId: getGoogleClientId()),
   ]);
-  print(FirebaseUIAuth.providersFor(FirebaseAuth.instance.app));
   runApp(const ProviderScope(child: MyApp()));
 }
 
