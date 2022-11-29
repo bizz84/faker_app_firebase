@@ -2,10 +2,15 @@ import 'package:faker_app_firebase/src/auth/providers.dart';
 import 'package:faker_app_firebase/src/routing/go_router_refresh_stream.dart';
 import 'package:faker_app_firebase/src/screens/custom_profile_screen.dart';
 import 'package:faker_app_firebase/src/screens/custom_sign_in_screen.dart';
+import 'package:faker_app_firebase/src/screens/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-enum AppRoute { signIn, profile }
+enum AppRoute {
+  signIn,
+  home,
+  profile,
+}
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final firebaseAuth = ref.watch(firebaseAuthProvider);
@@ -16,10 +21,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final isLoggedIn = firebaseAuth.currentUser != null;
       if (isLoggedIn) {
         if (state.subloc == '/sign-in') {
-          return '/profile';
+          return '/home';
         }
       } else {
-        if (state.subloc.startsWith('/profile')) {
+        if (state.subloc.startsWith('/home')) {
           return '/sign-in';
         }
       }
@@ -42,6 +47,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => NoTransitionPage(
           key: state.pageKey,
           child: const CustomProfileScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/home',
+        name: AppRoute.home.name,
+        pageBuilder: (context, state) => NoTransitionPage(
+          key: state.pageKey,
+          child: const HomeScreen(),
         ),
       ),
     ],

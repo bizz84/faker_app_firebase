@@ -14,6 +14,7 @@ class FirestoreDatabase {
   }
 
   // TODO: Show get as well
+
   Stream<List<Job>> jobs(String uid) {
     return _firestore.collection('users/$uid/jobs').snapshots().map(
           (snapshot) => snapshot.docs
@@ -30,7 +31,7 @@ final firestoreDatabaseProvider = Provider<FirestoreDatabase>((ref) {
   return FirestoreDatabase(FirebaseFirestore.instance);
 });
 
-final jobsProvider = StreamProvider<List<Job>>((ref) {
+final jobsProvider = StreamProvider.autoDispose<List<Job>>((ref) {
   final database = ref.watch(firestoreDatabaseProvider);
   final user = ref.watch(authStateChangesProvider).value;
   if (user == null) {
