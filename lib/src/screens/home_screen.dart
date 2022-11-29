@@ -2,9 +2,11 @@ import 'package:faker_app_firebase/src/auth/providers.dart';
 import 'package:faker_app_firebase/src/common_widgets/async_value_widget.dart';
 import 'package:faker_app_firebase/src/data/firestore_database.dart';
 import 'package:faker_app_firebase/src/models/job.dart';
+import 'package:faker_app_firebase/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:faker/faker.dart' hide Job;
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -14,8 +16,8 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Jobs'), actions: [
         IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: () => ref.read(firebaseAuthProvider).signOut(),
+          icon: const Icon(Icons.person),
+          onPressed: () => context.goNamed(AppRoute.profile.name),
         )
       ]),
       body: Consumer(

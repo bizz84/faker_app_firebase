@@ -36,7 +36,7 @@ dependencies:
   firebase_auth: ^4.1.4
   flutter_riverpod: ^2.1.1
   firebase_ui_auth: ^1.1.0
-  go_router: ^5.2.0
+  go_router: 5.1.1
   faker: ^2.0.0
   cloud_firestore: ^4.1.0
   firebase_ui_oauth_google: ^1.0.7
