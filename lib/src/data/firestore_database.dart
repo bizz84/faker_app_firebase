@@ -13,10 +13,25 @@ class FirestoreDatabase {
     });
   }
 
-  // TODO: Show get as well
+  Query<Job> jobsQuery(String uid) {
+    // TODO: order by
+    return _firestore.collection('users/$uid/jobs').withConverter<Job>(
+          fromFirestore: (doc, _) {
+            final data = doc.data();
+            return Job(
+              id: doc.id,
+              jobName: data != null ? data['jobName'] : '',
+            );
+          },
+          toFirestore: (job, options) => {'jobName': job.jobName},
+        );
+  }
 
+  // TODO: Show get as well
   Stream<List<Job>> jobs(String uid) {
-    return _firestore.collection('users/$uid/jobs').snapshots().map(
+    // TODO: order by
+    final ref = _firestore.collection('users/$uid/jobs');
+    return ref.snapshots().map(
           (snapshot) => snapshot.docs
               .map((snapshot) => Job(
                     id: snapshot.id,
@@ -32,10 +47,19 @@ final firestoreDatabaseProvider = Provider<FirestoreDatabase>((ref) {
 });
 
 final jobsProvider = StreamProvider.autoDispose<List<Job>>((ref) {
-  final database = ref.watch(firestoreDatabaseProvider);
   final user = ref.watch(authStateChangesProvider).value;
   if (user == null) {
-    throw AssertionError('User is null');
+    throw AssertionError('Can\'t query jobs when the user is null');
   }
+  final database = ref.watch(firestoreDatabaseProvider);
   return database.jobs(user.uid);
+});
+
+final jobsQueryProvider = Provider.autoDispose<Query<Job>>((ref) {
+  final user = ref.watch(authStateChangesProvider).value;
+  if (user == null) {
+    throw AssertionError('Can\'t query jobs when the user is null');
+  }
+  final database = ref.watch(firestoreDatabaseProvider);
+  return database.jobsQuery(user.uid);
 });

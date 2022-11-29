@@ -169,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  firebase_ui_firestore:
+    dependency: "direct main"
+    description:
+      name: firebase_ui_firestore
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   firebase_ui_localizations:
     dependency: transitive
     description:

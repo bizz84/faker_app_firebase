@@ -1,5 +1,6 @@
 import 'package:faker_app_firebase/firebase_options.dart';
 import 'package:faker_app_firebase/google_client_id.dart';
+import 'package:faker_app_firebase/src/auth/providers.dart';
 import 'package:faker_app_firebase/src/routing/app_router.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
@@ -16,7 +17,11 @@ Future<void> main() async {
   FirebaseUIAuth.configureProviders([
     GoogleProvider(clientId: getGoogleClientId()),
   ]);
-  runApp(const ProviderScope(child: MyApp()));
+  final container = ProviderContainer();
+  // await until auth state is determined
+  // this will prevent unnecessary redirects inside GoRouter when the app starts
+  await container.read(authStateChangesProvider.future);
+  runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
