@@ -1,6 +1,6 @@
 import 'package:faker_app_firebase/firebase_options.dart';
 import 'package:faker_app_firebase/google_client_id.dart';
-import 'package:faker_app_firebase/src/auth/providers.dart';
+import 'package:faker_app_firebase/src/data/auth_providers.dart';
 import 'package:faker_app_firebase/src/routing/app_router.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';

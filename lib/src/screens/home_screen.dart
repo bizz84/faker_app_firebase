@@ -1,4 +1,4 @@
-import 'package:faker_app_firebase/src/auth/providers.dart';
+import 'package:faker_app_firebase/src/data/auth_providers.dart';
 import 'package:faker_app_firebase/src/common_widgets/error_message_widget.dart';
 import 'package:faker_app_firebase/src/data/firestore_database.dart';
 import 'package:faker_app_firebase/src/models/job.dart';
@@ -37,23 +37,8 @@ class HomeScreen extends ConsumerWidget {
             loadingBuilder: (context) =>
                 const Center(child: CircularProgressIndicator()),
             emptyBuilder: (context) => const SizedBox.shrink(),
+            // TODO: pageSize, pagination etc
           );
-          // Alternative implementation that does not use a Query
-          // final jobsAsync = ref.watch(jobsProvider);
-          // return AsyncValueWidget<List<Job>>(
-          //   value: jobsAsync,
-          //   data: (jobs) => ListView.separated(
-          //     itemBuilder: (context, index) {
-          //       final job = jobs[index];
-          //       return ListTile(
-          //         title: Text(job.jobName),
-          //         dense: true,
-          //       );
-          //     },
-          //     itemCount: jobs.length,
-          //     separatorBuilder: (context, index) => const Divider(),
-          //   ),
-          // );
         },
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,4 +1,4 @@
-import 'package:faker_app_firebase/src/auth/providers.dart';
+import 'package:faker_app_firebase/src/data/auth_providers.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

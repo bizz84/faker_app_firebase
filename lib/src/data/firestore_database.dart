@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faker_app_firebase/src/auth/providers.dart';
+import 'package:faker_app_firebase/src/data/auth_providers.dart';
 import 'package:faker_app_firebase/src/models/job.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,4 +1,4 @@
-import 'package:faker_app_firebase/src/auth/providers.dart';
+import 'package:faker_app_firebase/src/data/auth_providers.dart';
 import 'package:faker_app_firebase/src/routing/go_router_refresh_stream.dart';
 import 'package:faker_app_firebase/src/screens/custom_profile_screen.dart';
 import 'package:faker_app_firebase/src/screens/custom_sign_in_screen.dart';
