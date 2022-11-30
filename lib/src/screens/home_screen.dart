@@ -1,5 +1,4 @@
 import 'package:faker_app_firebase/src/data/auth_providers.dart';
-import 'package:faker_app_firebase/src/common_widgets/error_message_widget.dart';
 import 'package:faker_app_firebase/src/data/firestore_database.dart';
 import 'package:faker_app_firebase/src/models/job.dart';
 import 'package:faker_app_firebase/src/routing/app_router.dart';
@@ -21,26 +20,7 @@ class HomeScreen extends ConsumerWidget {
           onPressed: () => context.goNamed(AppRoute.profile.name),
         )
       ]),
-      body: Consumer(
-        builder: (context, ref, child) {
-          final jobsQuery = ref.watch(jobsQueryProvider);
-          return FirestoreListView<Job>(
-            query: jobsQuery,
-            itemBuilder: (context, jobSnapshot) {
-              return ListTile(
-                title: Text(jobSnapshot.data().jobName),
-                dense: true,
-              );
-            },
-            errorBuilder: (context, error, stackTrace) =>
-                Center(child: ErrorMessageWidget(error.toString())),
-            loadingBuilder: (context) =>
-                const Center(child: CircularProgressIndicator()),
-            emptyBuilder: (context) => const SizedBox.shrink(),
-            // TODO: pageSize, pagination etc
-          );
-        },
-      ),
+      body: const JobsListView(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
@@ -51,5 +31,68 @@ class HomeScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+}
+
+class JobsListView extends ConsumerWidget {
+  const JobsListView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final jobsQuery = ref.watch(jobsQueryProvider);
+    return FirestoreQueryBuilder<Job>(
+      query: jobsQuery,
+      pageSize: 10,
+      builder: (context, snapshot, child) {
+        return ListView.builder(
+          itemCount: snapshot.docs.length,
+          itemBuilder: (context, index) {
+            // if we reached the end of the currently obtained items, we try to
+            // obtain more items
+            if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+              // Tell FirestoreQueryBuilder to try to obtain more items.
+              // It is safe to call this function from within the build method.
+              snapshot.fetchMore();
+            }
+            final job = snapshot.docs[index].data();
+            final jobId = snapshot.docs[index].id;
+            return Dismissible(
+              key: Key(jobId),
+              background: Container(color: Colors.red),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) {
+                final user = ref.read(currentUserProvider);
+                ref.read(firestoreDatabaseProvider).deleteJob(user!.uid, jobId);
+              },
+              child: ListTile(
+                title: Text(job.title),
+                subtitle: job.createdAt != null
+                    ? Text(job.createdAt.toString())
+                    : null,
+                dense: true,
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    // return FirestoreListView<Job>(
+    //   query: jobsQuery,
+    //   pageSize: 10,
+    //   itemBuilder: (context, jobSnapshot) {
+    //     final job = jobSnapshot.data();
+    //     return ListTile(
+    //       title: Text(job.title),
+    //       dense: true,
+    //     );
+    //   },
+    //   errorBuilder: (context, error, stackTrace) =>
+    //       Center(child: ErrorMessageWidget(error.toString())),
+    //   loadingBuilder: (context) =>
+    //       const Center(child: CircularProgressIndicator()),
+    //   emptyBuilder: (context) => const SizedBox.shrink(),
+    //   // TODO: pageSize, pagination etc
+    // );
   }
 }

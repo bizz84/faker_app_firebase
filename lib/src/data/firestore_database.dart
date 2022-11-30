@@ -7,36 +7,35 @@ class FirestoreDatabase {
   FirestoreDatabase(this._firestore);
   final FirebaseFirestore _firestore;
 
-  Future<void> addJob(String uid, String jobName) async {
-    await _firestore.collection('users/$uid/jobs').add({
-      'jobName': jobName,
-    });
-  }
+  Future<void> addJob(String uid, String title) =>
+      _firestore.collection('users/$uid/jobs').add({
+        'title': title,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+  Future<void> deleteJob(String uid, String jobId) =>
+      _firestore.doc('users/$uid/jobs/$jobId').delete();
 
   Query<Job> jobsQuery(String uid) {
-    // TODO: order by
-    return _firestore.collection('users/$uid/jobs').withConverter<Job>(
-          fromFirestore: (doc, _) {
-            final data = doc.data();
-            return Job(
-              id: doc.id,
-              jobName: data != null ? data['jobName'] : '',
-            );
-          },
-          toFirestore: (job, options) => {'jobName': job.jobName},
-        );
+    final collectionRef = _firestore
+        .collection('users/$uid/jobs')
+        .orderBy('createdAt', descending: true);
+    return collectionRef.withConverter<Job>(
+      fromFirestore: (doc, _) {
+        final data = doc.data();
+        return Job.fromMap(data!);
+      },
+      toFirestore: (job, options) => job.toMap(),
+    );
   }
 
   // TODO: Show get as well
   Stream<List<Job>> jobs(String uid) {
-    // TODO: order by
-    final ref = _firestore.collection('users/$uid/jobs');
-    return ref.snapshots().map(
+    final collectionRef =
+        _firestore.collection('users/$uid/jobs').orderBy('createdAt');
+    return collectionRef.snapshots().map(
           (snapshot) => snapshot.docs
-              .map((snapshot) => Job(
-                    id: snapshot.id,
-                    jobName: snapshot.data()['jobName'],
-                  ))
+              .map((snapshot) => Job.fromMap(snapshot.data()))
               .toList(),
         );
   }
