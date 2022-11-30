@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Job {
   Job({required this.title, required this.createdAt});
-  //final String id;
   final String title;
   final DateTime? createdAt;
 

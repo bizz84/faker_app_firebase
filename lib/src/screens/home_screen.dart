@@ -1,6 +1,6 @@
 import 'package:faker_app_firebase/src/data/auth_providers.dart';
-import 'package:faker_app_firebase/src/data/firestore_database.dart';
-import 'package:faker_app_firebase/src/models/job.dart';
+import 'package:faker_app_firebase/src/data/firestore_repository.dart';
+import 'package:faker_app_firebase/src/data/job.dart';
 import 'package:faker_app_firebase/src/routing/app_router.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Jobs'), actions: [
+      appBar: AppBar(title: const Text('My CV'), actions: [
         IconButton(
           icon: const Icon(Icons.person),
           onPressed: () => context.goNamed(AppRoute.profile.name),
@@ -24,10 +24,10 @@ class HomeScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          final user = ref.read(currentUserProvider);
+          final user = ref.read(authStateChangesProvider).value;
           final faker = Faker();
           final title = faker.job.title();
-          ref.read(firestoreDatabaseProvider).addJob(user!.uid, title);
+          ref.read(firestoreRepositoryProvider).addJob(user!.uid, title);
         },
       ),
     );
@@ -40,10 +40,18 @@ class JobsListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final jobsQuery = ref.watch(jobsQueryProvider);
+    if (jobsQuery == null) {
+      return const SizedBox.shrink();
+    }
     return FirestoreQueryBuilder<Job>(
       query: jobsQuery,
       pageSize: 10,
       builder: (context, snapshot, child) {
+        if (snapshot.docs.isEmpty) {
+          return Center(
+              child: Text('No Data',
+                  style: Theme.of(context).textTheme.headline5));
+        }
         return ListView.builder(
           itemCount: snapshot.docs.length,
           itemBuilder: (context, index) {
@@ -61,8 +69,10 @@ class JobsListView extends ConsumerWidget {
               background: Container(color: Colors.red),
               direction: DismissDirection.endToStart,
               onDismissed: (direction) {
-                final user = ref.read(currentUserProvider);
-                ref.read(firestoreDatabaseProvider).deleteJob(user!.uid, jobId);
+                final user = ref.read(authStateChangesProvider).value;
+                ref
+                    .read(firestoreRepositoryProvider)
+                    .deleteJob(user!.uid, jobId);
               },
               child: ListTile(
                 title: Text(job.title),

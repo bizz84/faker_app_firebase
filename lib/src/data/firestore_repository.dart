@@ -1,21 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker_app_firebase/src/data/auth_providers.dart';
-import 'package:faker_app_firebase/src/models/job.dart';
+import 'package:faker_app_firebase/src/data/job.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FirestoreDatabase {
-  FirestoreDatabase(this._firestore);
+class FirestoreRepository {
+  FirestoreRepository(this._firestore);
   final FirebaseFirestore _firestore;
 
+  // create
   Future<void> addJob(String uid, String title) =>
       _firestore.collection('users/$uid/jobs').add({
         'title': title,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
+  // delete
   Future<void> deleteJob(String uid, String jobId) =>
       _firestore.doc('users/$uid/jobs/$jobId').delete();
 
+  // read
   Query<Job> jobsQuery(String uid) {
     final collectionRef = _firestore
         .collection('users/$uid/jobs')
@@ -25,7 +28,7 @@ class FirestoreDatabase {
         final data = doc.data();
         return Job.fromMap(data!);
       },
-      toFirestore: (job, options) => job.toMap(),
+      toFirestore: (doc, options) => doc.toMap(),
     );
   }
 
@@ -41,24 +44,25 @@ class FirestoreDatabase {
   }
 }
 
-final firestoreDatabaseProvider = Provider<FirestoreDatabase>((ref) {
-  return FirestoreDatabase(FirebaseFirestore.instance);
+final firestoreRepositoryProvider = Provider<FirestoreRepository>((ref) {
+  return FirestoreRepository(FirebaseFirestore.instance);
+});
+
+final jobsQueryProvider = Provider.autoDispose<Query<Job>?>((ref) {
+  final user = ref.watch(authStateChangesProvider).value;
+  if (user == null) {
+    return null;
+    //throw AssertionError('Can\'t query user data when the user is null');
+  }
+  final database = ref.watch(firestoreRepositoryProvider);
+  return database.jobsQuery(user.uid);
 });
 
 final jobsProvider = StreamProvider.autoDispose<List<Job>>((ref) {
   final user = ref.watch(authStateChangesProvider).value;
   if (user == null) {
-    throw AssertionError('Can\'t query jobs when the user is null');
+    return const Stream.empty();
   }
-  final database = ref.watch(firestoreDatabaseProvider);
+  final database = ref.watch(firestoreRepositoryProvider);
   return database.jobs(user.uid);
-});
-
-final jobsQueryProvider = Provider.autoDispose<Query<Job>>((ref) {
-  final user = ref.watch(authStateChangesProvider).value;
-  if (user == null) {
-    throw AssertionError('Can\'t query jobs when the user is null');
-  }
-  final database = ref.watch(firestoreDatabaseProvider);
-  return database.jobsQuery(user.uid);
 });
