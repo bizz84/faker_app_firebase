@@ -27,7 +27,10 @@ class HomeScreen extends ConsumerWidget {
           final user = ref.read(authStateChangesProvider).value;
           final faker = Faker();
           final title = faker.job.title();
-          ref.read(firestoreRepositoryProvider).addJob(user!.uid, title);
+          final company = faker.company.name();
+          ref
+              .read(firestoreRepositoryProvider)
+              .addJob(user!.uid, title, company);
         },
       ),
     );
@@ -64,6 +67,7 @@ class JobsListView extends ConsumerWidget {
             }
             final job = snapshot.docs[index].data();
             final jobId = snapshot.docs[index].id;
+
             return Dismissible(
               key: Key(jobId),
               background: Container(color: Colors.red),
@@ -76,8 +80,10 @@ class JobsListView extends ConsumerWidget {
               },
               child: ListTile(
                 title: Text(job.title),
-                subtitle: job.createdAt != null
-                    ? Text(job.createdAt.toString())
+                subtitle: Text(job.company),
+                trailing: job.createdAt != null
+                    ? Text(job.createdAt.toString(),
+                        style: Theme.of(context).textTheme.caption)
                     : null,
                 dense: true,
               ),

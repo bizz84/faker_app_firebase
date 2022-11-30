@@ -8,9 +8,10 @@ class FirestoreRepository {
   final FirebaseFirestore _firestore;
 
   // create
-  Future<void> addJob(String uid, String title) =>
+  Future<void> addJob(String uid, String title, String company) =>
       _firestore.collection('users/$uid/jobs').add({
         'title': title,
+        'company': company,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
