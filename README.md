@@ -82,4 +82,10 @@ String getGoogleClientId() {
 }
 ```
 
+### Issues and Friction Log
+
+Read this log for all the issues I encountered while enabling Google Sign In:
+
+- [Google Sign In with FlutterFire - Friction Log](https://gorgeous-bar-e02.notion.site/Google-Sign-In-with-FlutterFire-Friction-Log-b188dc66685d4d45b3f7d107c8a45d6a)
+
 ### [LICENSE: MIT](LICENSE.md)
