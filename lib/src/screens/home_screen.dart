@@ -55,6 +55,12 @@ class JobsListView extends ConsumerWidget {
               child: Text('No Data',
                   style: Theme.of(context).textTheme.headline5));
         }
+        if (snapshot.isFetching) {
+          // TODO
+        }
+        if (snapshot.hasError) {
+          // TODO
+        }
         return ListView.builder(
           itemCount: snapshot.docs.length,
           itemBuilder: (context, index) {
