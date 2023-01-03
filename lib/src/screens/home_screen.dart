@@ -87,11 +87,21 @@ class JobsListView extends ConsumerWidget {
               child: ListTile(
                 title: Text(job.title),
                 subtitle: Text(job.company),
+                // TODO: use updatedAt
                 trailing: job.createdAt != null
                     ? Text(job.createdAt.toString(),
                         style: Theme.of(context).textTheme.caption)
                     : null,
                 dense: true,
+                onTap: () {
+                  final user = ref.read(authStateChangesProvider).value;
+                  final faker = Faker();
+                  final title = faker.job.title();
+                  final company = faker.company.name();
+                  ref
+                      .read(firestoreRepositoryProvider)
+                      .updateJob(user!.uid, jobId, title, company);
+                },
               ),
             );
           },

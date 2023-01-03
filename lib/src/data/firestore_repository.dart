@@ -8,11 +8,22 @@ class FirestoreRepository {
   final FirebaseFirestore _firestore;
 
   // create
+
   Future<void> addJob(String uid, String title, String company) =>
       _firestore.collection('users/$uid/jobs').add({
         'title': title,
         'company': company,
+        // Note: Using serverTimestamp will cause onSnapshot to fire twice
+        // First cache hit, then update from the server
+        // https://stackoverflow.com/questions/71724670/why-fieldvalue-servertimestamp-return-null-value-from-first-snapshot/71731076#71731076
         'createdAt': FieldValue.serverTimestamp(),
+      });
+
+  Future<void> updateJob(
+          String uid, String jobId, String title, String company) =>
+      _firestore.doc('users/$uid/jobs/$jobId').update({
+        'title': title,
+        'company': company,
       });
 
   // delete
